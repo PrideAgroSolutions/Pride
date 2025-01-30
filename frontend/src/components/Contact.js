@@ -1,4 +1,5 @@
 import React, { useState, useRef } from "react";
+import {Link} from 'react-router-dom';
 import emailjs from '@emailjs/browser';
 const Contact = () => {
     const form = useRef();
@@ -72,7 +73,7 @@ const Contact = () => {
                                         </path>
                                     </svg>
                                 </dt>
-                                <dd><a class="hover:text-gray-900" href="mailto:prideagrosolutions@gmail.com">prideagrosolutions@gmail.com</a></dd>
+                                <dd><Link class="hover:text-gray-900" to="mailto:prideagrosolutions@gmail.com">prideagrosolutions@gmail.com</Link></dd>
                             </div>
                             <div class="flex gap-x-4">
                                 <dt class="flex-none">

@@ -1,5 +1,6 @@
 import React from "react";
 import Button from "./Button";
+import { Link } from "react-router-dom";
 import front1 from "../assets/front1.jpg";
 import front2 from "../assets/front2.jpg";
 import front3 from "../assets/front3.jpg";
@@ -13,12 +14,13 @@ const HeroSection = () => {
           Improve your crop yield with sustainable and innovative solutions
         </h1>
         <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center md:justify-start">
-          <a href="/Products">
+          <Link
+           to="/Products">
             <Button label="Our products" primary />
-          </a>
-          <a href="/results">
+          </Link>
+          <Link to="/results">
             <Button label="Our Results" />
-          </a>
+          </Link>
         </div>
       </div>
 

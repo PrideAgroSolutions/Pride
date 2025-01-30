@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { useNavigate } from "react-router-dom"
+import { useNavigate, Link } from "react-router-dom"
 
 import { GoogleLogin } from '@react-oauth/google';
 import { GoogleOAuthProvider } from '@react-oauth/google';
@@ -255,12 +255,12 @@ const SignUpPage = () => {
                     </div>
 
                     <span className="text-sm">Already have an account?  </span>
-                    <a
-                        href="/login"
+                    <Link
+                        to="/login"
                         className="text-sm text-blue-500 hover:underline"
                     >
                         Login
-                    </a>
+                    </Link>
                 </div>
             </div>
         </div>

@@ -3,7 +3,7 @@ import { GoogleLogin } from "@react-oauth/google";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
 
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 
 import { BACKEND_URL_LINK } from '../../routes/url'
@@ -108,12 +108,14 @@ const Login = () => {
                     </div>
 
                     <span className="text-sm">I don't have an account! </span>
-                    <a
-                        href="/Signup"
-                        className="text-sm text-blue-500 hover:underline"
-                    >
+                    <Link to="/Signup" className="text-sm text-blue-500 hover:underline">
                         Sign Up
-                    </a>
+                    </Link>
+                    <Link to="/admin" className="text-xl text-left mt-4 text-green-500 border block hover:underline">
+                        Login as Admin
+                    </Link>
+
+
                 </div>
             </div>
         </div>

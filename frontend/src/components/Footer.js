@@ -1,6 +1,6 @@
 import React from "react";
 import logo from "../assets/logo.png"; // Replace with the path to your logo
-
+import { Link } from "react-router-dom";
 const Footer = () => {
   return (
     <footer className="bg-[#002b40] text-white py-10">
@@ -18,16 +18,16 @@ const Footer = () => {
             <div>
               <h3 className="font-bold text-lg mb-4">Agriculture</h3>
               <ul className="space-y-2">
-                <li className="hover:underline cursor-pointer"><a href="/products">Products</a></li>
-                <li className="hover:underline cursor-pointer"><a href="/results">Results</a></li>
-                <li className="hover:underline cursor-pointer"><a href="/about#Experts">Our Experts</a></li>
+                <li className="hover:underline cursor-pointer"><Link to="/products">Products</Link></li>
+                <li className="hover:underline cursor-pointer"><Link to="/results">Results</Link></li>
+                <li className="hover:underline cursor-pointer"><Link to="/about#Experts">Our Experts</Link></li>
               </ul>
             </div>
             <div>
               <h3 className="font-bold text-lg mb-4">About Us</h3>
               <ul className="space-y-2">
-                <li className="hover:underline cursor-pointer"><a href="/about">Our Story</a></li>
-                <li className="hover:underline cursor-pointer"><a href="/contact">Contact Us</a></li>
+                <li className="hover:underline cursor-pointer"><Link to="/about">Our Story</Link></li>
+                <li className="hover:underline cursor-pointer"><Link to="/contact">Contact Us</Link></li>
               </ul>
             </div>
           </div>
@@ -37,9 +37,9 @@ const Footer = () => {
         <div className="border-t border-gray-600 mt-8 pt-4 flex flex-col md:flex-row justify-between items-center text-sm">
           <p className="mb-4 md:mb-0">©2024 PridealgroSolutions. All rights reserved.</p>
           <div className="flex space-x-4">
-            <a href="#" className="hover:underline">Accessibility Statement</a>
-            <a href="#" className="hover:underline">Privacy Policy</a>
-            <a href="https://prideagrosolutions.com/" className="hover:underline">pridealgrosolutions.com</a>
+            <Link to="#" className="hover:underline">Accessibility Statement</Link>
+            <Link to="#" className="hover:underline">Privacy Policy</Link>
+            <Link to="https://prideagrosolutions.com/" className="hover:underline">pridealgrosolutions.com</Link>
           </div>
         </div>
       </div>
