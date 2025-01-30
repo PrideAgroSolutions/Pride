@@ -19,7 +19,6 @@ function App() {
 
   return (
     <div className="text-center">
-        <Navbar />
         <Router />
         <Footer />
     </div>

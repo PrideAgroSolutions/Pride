@@ -9,7 +9,8 @@ const order = require("./routes/order");
 const admin = require("./routes/admin");
 const result = require("./routes/result");
 
-import "dotenv/config";
+const dotenv = require("dotenv") 
+dotenv.config();
 const port = process.env.PORT || 9000;
 
 const app = express();
