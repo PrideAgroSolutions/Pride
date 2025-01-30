@@ -33,20 +33,20 @@ const AdminProduct = () => {
       navigate("/admin/Login");
       return;
     }
-    const fetchProducts = async () => {
-      setLoading(true); // Start loading
-      try {
-        const response = await axios.get(`${BACKEND_URL_LINK}/api/v2/getAllProduct`);
-        setProducts(response.data);
-      } catch (error) {
-        console.error("Error fetching products:", error);
-      } finally {
-        setLoading(false); // Stop loading
-      }
-    };
     fetchProducts();
   }, []);
-
+  
+  const fetchProducts = async () => {
+    setLoading(true); // Start loading
+    try {
+      const response = await axios.get(`${BACKEND_URL_LINK}/api/v2/getAllProduct`);
+      setProducts(response.data);
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    } finally {
+      setLoading(false); // Stop loading
+    }
+  };
 
   // Handle input change
   const handleInputChange = (e) => {

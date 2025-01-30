@@ -26,20 +26,20 @@ const AdminResult = () => {
     if (!AdminId) {
       navigate("/admin/Login");
     }
-    const fetchResults = async () => {
-      setLoading(true); // Start loading
-      try {
-        const response = await axios.get(`${BACKEND_URL_LINK}/api/v5/getAllResults`);
-        setResults(response.data);
-      } catch (error) {
-        console.error("Error fetching results:", error);
-      } finally {
-        setLoading(false); // Stop loading
-      }
-    };
     fetchResults();
   },[]);
-
+  
+  const fetchResults = async () => {
+    setLoading(true); // Start loading
+    try {
+      const response = await axios.get(`${BACKEND_URL_LINK}/api/v5/getAllResults`);
+      setResults(response.data);
+    } catch (error) {
+      console.error("Error fetching results:", error);
+    } finally {
+      setLoading(false); // Stop loading
+    }
+  };
 
   // Handle input change
   const handleInputChange = (e) => {
