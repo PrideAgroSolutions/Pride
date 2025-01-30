@@ -1,0 +1,177 @@
+Product: {
+    name: "PRIDE SIZER",
+    composition: ["xyz", "abc", "pqr"],
+    dosage: "spray/driching - 0.5 ml to 1 ml/ltr of water",
+    packing: "500 ml",
+    image: [ProductImage1, ProductImage2],
+    benefits:
+        "L-free amino acids, auxin, pgp powder, vitamin b12, stabilizer, sea weed extract. It is 100% organic agro-energizer & stimulant. It is a combination of essential amino acids and vitamins proven to be highly bioactive and world-famous for its effectiveness in horticulture belts. It has a unique ability for meeting the nutritional requirements of horticultural crops. Improves fruit quality and fruit shining. Encourages blossoming. Increases plant immunity & resistance to diseases. Produces high yield with organic quality.",
+    target: ["banana", "custard apple", "guava", "sugarcane"],
+    price: 1200,
+}
+
+Order : {
+	product : [
+        {
+            type : mongoose.Types.ObjectId,
+            ref : "Order"
+        }
+    ],
+	UserName : xyz   // dont show but store...
+	item_count : length(product); // dont store it show it runtime...
+	price : Number,
+	status : ontheway, delivered, cancelled.
+	userId : type : mongoose.Types.ObjectId,
+	timestamp : system.
+}
+
+admins : {
+	name : 
+	email :
+	mobile : 
+	password :
+	status : {owner / admin}
+}
+
+User : {
+	name : 
+	email :
+	mobile : 
+	age : 
+	password : 
+	address : [intially empty]
+	
+	cartId : type : mongoose.Types.ObjectId,
+
+    order : [
+        {
+            type : mongoose.Types.ObjectId,
+            ref : "Order"
+        }
+    ],
+}
+
+Cart : {
+	product : [
+        {
+            type : mongoose.Types.ObjectId,
+            ref : "Order"
+        }
+    ],
+}
+
+
+Onclick of Buy Now 
+	check isLogin :
+		yes - procude then
+		no - redirect to Login
+	
+
+
+Entities : 
+	1. User 	
+	2. Order 	
+	3. Product(no relation) 	
+	4. Cart
+
+Relations :
+1. User -> Order, Cart.
+2. Order -> by whom=> User, of what => product
+3. Cart > User.
+
+
+
+Routes :
+	Home Page : 
+		1. get :- first 6 products.
+	
+	Product Page :
+		1. get :- all products.
+		
+	ProductDetails Page :-  input :- get productId from (product, home) page.
+		1. get :- get all info of specific product byID.
+	
+	Profile :
+		1. get :- Profile info -- show addresses also.
+		2. put :- adding address (put because array already created).
+		3. put :- profile info (including address).
+	
+	Order :
+		1. get :- orders array in user and show every order in detail and summury tag.
+		2. put :- (put status of order to cancel) if cancelled...			Note : give a comfirmation pop-up
+		Note : if ongoing then only cancel...
+		
+	Cart : 
+		1. get :- cart byId in user.
+		2. put :- remove product from cart array.
+		3. post :- create a empty cart for each user.
+		4. put :- add product from cart array.
+	
+	Login : 
+		1. get :- user
+	SignUp :
+		1. post :- user
+		
+
+
+Purchase Page :
+Case 1 : Clicked on Buy Now  
+	Steps : 
+		1. open 
+		2. add address, and show address.
+		3. payment 
+		4. reciept
+		
+Case 2 : Clicked on Buy in Cart
+	Steps : 
+		1. open all products
+		2. add address, and show address.
+		3. payment
+		4. reciept
+		
+Our End :
+		add purchase to orders
+		
+		
+
+
+Admin section :
+	only for owner:
+	{
+		SignUp :
+			1. post :- user	
+	}
+	
+	Login : 
+			1. get :- user
+		
+	profiles : 
+		1. get - show all profiles with everything
+	
+	order : 
+		1. get - show all orders 
+		2. put - update order status   Note : give a comfirmation pop-up
+		
+		
+	products :
+		1. get - show all products
+		
+		show options for
+			1. add product - create a form
+				- post new product
+			
+			2. remove product - by 1 button 
+				Note : give a comfirmation pop-up
+			
+			3. put product - by a from
+				update product information
+			
+
+
+			echo "# Pride" >> README.md                                       
+>> git init                                 
+>> git add README.md
+>> git commit -m "first commit"
+>> git branch -M main
+>> git remote add origin https://github.com/PrideAgroSolutions/Pride.git
+>> git push -u origin main

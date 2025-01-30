@@ -1,0 +1,1 @@
+export const BACKEND_URL_LINK = process.env.REACT_APP_URL_LINK;
