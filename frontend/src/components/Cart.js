@@ -35,7 +35,7 @@ const Cart = () => {
     };
 
     fetchCart();
-  }, [userId]);
+  }, []);
 
   const handleRemoveItem = async (productId) => {
     const confirmRemove = window.confirm("Are you sure you want to remove this item?");

@@ -28,7 +28,7 @@ const AdminNavbar = () => {
       <div className="container flex justify-between items-center">
         <div className='flex items-center'>
           <div className="text-yellow-700 text-2xl font-bold cursor-pointer">
-            <img onClick={() => window.location.reload()} className='w-20' src={logo} />
+            <img onClick={() => window.location.reload()} alt='logo' className='w-20' src={logo} />
           </div>
           <button
             className="absolute right-1 mr-4 md:hidden text-white focus:outline-none"

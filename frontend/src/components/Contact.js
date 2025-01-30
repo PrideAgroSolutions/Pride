@@ -89,6 +89,7 @@ const Contact = () => {
                             </div>
                         </dl>
                         <iframe 
+                        title="Google Map Location"
                         src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7560.172250515017!2d73.73992767412292!3d18.660130810906374!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc2b1edd658d297%3A0x7bd566c0357b8443!2sBHALCHANDRA%20PROSPERA%2CNB%20Bhondve%20Promotors!5e0!3m2!1sen!2sin!4v1737898529596!5m2!1sen!2sin" width="550"
                         height="350" 
                         className="my-10 order-none"

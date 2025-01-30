@@ -9,7 +9,7 @@ const Booking = () => {
   const navigate = useNavigate();
   
   let userId = sessionStorage.getItem("Id");
-  if(userId == "") {
+  if(userId === "") {
     navigate("/Login");
   }
 

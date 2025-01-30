@@ -12,19 +12,20 @@ const OrderDetails = () => {
   const [loading, setLoading] = useState(true); // Track loading state
 
   useEffect(() => {
+    const fetchOrderDetails = async () => {
+      try {
+        const response = await axios.get(`${BACKEND_URL_LINK}/api/v3/getSpecificOrder/${orderId}`);
+        setOrder(response.data);
+      } catch (error) {
+        console.error("Error fetching order details:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
     fetchOrderDetails();
   }, []);
 
-  const fetchOrderDetails = async () => {
-    try {
-      const response = await axios.get(`${BACKEND_URL_LINK}/api/v3/getSpecificOrder/${orderId}`);
-      setOrder(response.data);
-    } catch (error) {
-      console.error("Error fetching order details:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  
 
   if (loading) {
     return <li>Loading order details...</li>;

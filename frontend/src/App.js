@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react'
 import Router from "./routes/Router";
-import Footer from "./components/Footer"
 
 import { authAction } from "./store";
 import { useDispatch } from "react-redux";
