@@ -5,8 +5,6 @@ import Footer from "./components/Footer"
 import { authAction } from "./store";
 import { useDispatch } from "react-redux";
 
-import Navbar from './components/Navbar';
-
 
 function App() {
   const dispatch = useDispatch();
@@ -20,7 +18,6 @@ function App() {
   return (
     <div className="text-center">
         <Router />
-        <Footer />
     </div>
   );
 }
