@@ -64,7 +64,7 @@ function Router() {
             
             
             {/* Admin */}
-            <Route path="/admin/" element={<AdminHome/>} ></Route> 
+            <Route path="/admin" element={<AdminHome/>} ></Route> 
             <Route path="/admin/Login" element={<AdminLogin/>} ></Route> 
             
             <Route path="/admin/Create" element={<AdminCreate/>} ></Route> 

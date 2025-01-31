@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import logo from '../assets/logo.png';
 
 import { useSelector } from 'react-redux';
@@ -7,9 +7,11 @@ import { useDispatch } from 'react-redux';
 import { authAction } from '../store';
 
 const AdminNavbar = () => {
+
   const dispatch = useDispatch();
   const isLoggedIn = useSelector((state) => state.isLoggedIn);
 
+  const navigate = useNavigate();
   const handleLogout = () => {
     let confirmLogout = window.confirm("Are you Sure to Logout!");
     if (!confirmLogout) {
@@ -18,6 +20,7 @@ const AdminNavbar = () => {
     dispatch(authAction.logout());
     sessionStorage.removeItem("AdminId");
     sessionStorage.removeItem("role");
+    navigate("/admin/Login");
     window.location.reload();
   };
 

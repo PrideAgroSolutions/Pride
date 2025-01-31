@@ -24,7 +24,7 @@ const Login = () => {
             if (response.status === 200) {
                 sessionStorage.setItem("AdminId", response.data.user._id);
                 sessionStorage.setItem("role","admin");
-                navigate("/admin/");
+                navigate("/admin");
                 window.location.reload();
             }
         } catch (error) {
