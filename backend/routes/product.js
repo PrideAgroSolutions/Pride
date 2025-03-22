@@ -123,30 +123,37 @@ router.post('/addProduct', async (req, res) => {
     }
 });
 
-
 // PUT route to update a product by ID
 router.put('/updateProduct/:id', async (req, res) => {
     try {
         const { id } = req.params;
         let updates = req.body;
 
+        // Find the existing product
+        const existingProduct = await Product.findById(id);
+        if (!existingProduct) {
+            return res.status(404).json({ message: 'Product not found.' });
+        }
+
         // Check if an image is included in the request
         if (req.files && req.files.image) {
             const file = req.files.image;
 
-            // Upload the new image to Cloudinary
-            const uploadResult = await cloudinary.uploader.upload(file.tempFilePath);
+            // Delete existing image from Cloudinary
+            if (existingProduct.image) {
+                const url = new URL(existingProduct.image); // Parse URL
+                const pathname = url.pathname; // Get path from URL
+                const publicId = pathname.substring(pathname.lastIndexOf('/') + 1, pathname.lastIndexOf('.')); // Extract public ID
+                await cloudinary.uploader.destroy(publicId);
+            }
 
-            // Add the new image URL to the updates
-            updates.image = uploadResult.url;
+            // Upload new image to Cloudinary
+            const uploadResult = await cloudinary.uploader.upload(file.tempFilePath);
+            updates.image = uploadResult.secure_url; // Store new image URL
         }
 
         // Update the product in the database
         const updatedProduct = await Product.findByIdAndUpdate(id, updates, { new: true });
-
-        if (!updatedProduct) {
-            return res.status(404).json({ message: 'Product not found.' });
-        }
 
         res.status(200).json({
             message: 'Product updated successfully!',
@@ -158,25 +165,33 @@ router.put('/updateProduct/:id', async (req, res) => {
     }
 });
 
-
 // DELETE route to delete a product by ID
 router.delete('/deleteProduct/:id', async (req, res) => {
     try {
         const { id } = req.params;
 
-        // Delete product by ID
-        const deletedProduct = await Product.findByIdAndDelete(id);
-
-        if (!deletedProduct) {
+        // Find the product before deleting
+        const product = await Product.findById(id);
+        if (!product) {
             return res.status(404).json({ message: 'Product not found.' });
         }
 
+        // Delete product image from Cloudinary
+        if (product.image) {
+            const url = new URL(product.image); // Parse URL
+            const pathname = url.pathname; // Get path from URL
+            const publicId = pathname.substring(pathname.lastIndexOf('/') + 1, pathname.lastIndexOf('.')); // Extract public ID
+            await cloudinary.uploader.destroy(publicId);
+        }
+
+        // Delete product from database
+        await Product.findByIdAndDelete(id);
+
         res.status(200).json({
             message: 'Product deleted successfully!',
-            product: deletedProduct
         });
     } catch (error) {
-        console.error(error);
+        console.error('Error deleting product:', error);
         res.status(500).json({ message: 'Server error. Please try again later.' });
     }
 });

@@ -28,53 +28,59 @@ router.get("/getAllResults", async (req, res) => {
   }
 });
 
-
-// Update Result Route
 router.put("/updateResult/:id", async (req, res) => {
   try {
-    const { name, description } = req.body;
-    const resultId = req.params.id;
+      const { name, description } = req.body;
+      const resultId = req.params.id;
 
-    // Find the existing result by ID
-    let existingResult = await Result.findById(resultId);
-    if (!existingResult) {
-      return res.status(404).json({ message: "Result not found!" });
-    }
-
-    // Handle image uploads if there are new images
-    let uploadedImages = [];
-    if (req.files && req.files.images) {
-      // If there are images, delete old ones (optional, depending on your use case)
-      if (existingResult.image && existingResult.image.length > 0) {
-        existingResult.image.forEach(async (imageUrl) => {
-          const publicId = imageUrl.split('/').pop().split('.')[0]; // Extract the public ID from the URL
-          await cloudinary.uploader.destroy(publicId); // Destroy image in Cloudinary
-        });
+      // Find the existing result by ID
+      let existingResult = await Result.findById(resultId);
+      if (!existingResult) {
+          return res.status(404).json({ message: "Result not found!" });
       }
 
-      // Upload new images to Cloudinary
-      const imagesArray = req.files.images;
-      for (let i = 0; i < imagesArray.length; i++) {
-        const uploadResult = await cloudinary.uploader.upload(imagesArray[i].tempFilePath);
-        uploadedImages.push(uploadResult.url);
+      let uploadedImages = [];
+
+      // If new images are uploaded, delete old images and upload new ones
+      if (req.files && req.files.images) {
+          const imagesArray = Array.isArray(req.files.images) ? req.files.images : [req.files.images];
+
+          // Delete old images from Cloudinary
+          if (existingResult.image && existingResult.image.length > 0) {
+              for (const imageUrl of existingResult.image) {
+                  try {
+                      const url = new URL(imageUrl);
+                      const pathname = url.pathname;
+                      const publicId = pathname.substring(pathname.lastIndexOf('/') + 1, pathname.lastIndexOf('.'));
+                      await cloudinary.uploader.destroy(publicId);
+                  } catch (error) {
+                      console.error(`Error deleting old image from Cloudinary: ${imageUrl}`, error);
+                  }
+              }
+          }
+
+          // Upload new images to Cloudinary
+          for (const image of imagesArray) {
+              const uploadResult = await cloudinary.uploader.upload(image.tempFilePath);
+              uploadedImages.push(uploadResult.secure_url);
+          }
       }
-    }
 
-    // Update the result in the database
-    existingResult.name = name || existingResult.name;
-    existingResult.description = description || existingResult.description;
-    existingResult.image = uploadedImages.length > 0 ? uploadedImages : existingResult.image; // Keep existing images if none are uploaded
+      // Update the result in the database
+      existingResult.name = name || existingResult.name;
+      existingResult.description = description || existingResult.description;
+      existingResult.image = uploadedImages.length > 0 ? uploadedImages : existingResult.image;
 
-    // Save the updated result
-    const updatedResult = await existingResult.save();
+      // Save the updated result
+      const updatedResult = await existingResult.save();
 
-    res.status(200).json({
-      message: "Result updated successfully!",
-      result: updatedResult,
-    });
+      res.status(200).json({
+          message: "Result updated successfully!",
+          result: updatedResult,
+      });
   } catch (error) {
-    console.error("Error updating result:", error);
-    res.status(500).json({ message: "Server error. Please try again later." });
+      console.error("Error updating result:", error);
+      res.status(500).json({ message: "Server error. Please try again later." });
   }
 });
 
@@ -128,31 +134,41 @@ router.post('/addResult', async (req, res) => {
     }
 });
 
-
-// DELETE route to delete a result by ID
 router.delete('/deleteResult/:id', async (req, res) => {
-    try {
-        const { id } = req.params;
+  try {
+      const { id } = req.params;
 
-        // Delete product by ID
-        const deletedResult = await Result.findByIdAndDelete(id);
+      // Find the result before deleting
+      const result = await Result.findById(id);
+      if (!result) {
+          return res.status(404).json({ message: 'Result not found.' });
+      }
 
-        if (!deletedResult) {
-            return res.status(404).json({ message: 'Result not found.' });
-        }
+      // Delete images from Cloudinary
+      if (result.image && result.image.length > 0) {
+          for (const imageUrl of result.image) {
+              try {
+                  const url = new URL(imageUrl);
+                  const pathname = url.pathname;
+                  const publicId = pathname.substring(pathname.lastIndexOf('/') + 1, pathname.lastIndexOf('.'));
+                  await cloudinary.uploader.destroy(publicId);
+              } catch (error) {
+                  console.error(`Error deleting image from Cloudinary: ${imageUrl}`, error);
+              }
+          }
+      }
 
-        res.status(200).json({
-            message: 'Rusult deleted successfully!',
-            product: deletedResult
-        });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Server error. Please try again later.' });
-    }
+      // Delete result from database
+      await Result.findByIdAndDelete(id);
+
+      res.status(200).json({
+          message: 'Result deleted successfully!',
+      });
+  } catch (error) {
+      console.error('Error deleting result:', error);
+      res.status(500).json({ message: 'Server error. Please try again later.' });
+  }
 });
-
-
-
 
 
 module.exports = router;
