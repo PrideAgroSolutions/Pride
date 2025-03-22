@@ -12,47 +12,20 @@ const TestGrid = () => {
       percentage: 17,
       description: "Banana Yield",
       image: bananaImg,
-      isImage: false,
-    },
-    {
-      title: "",
-      location: "",
-      percentage: "",
-      description: "",
-      image: cauliflowerImg,
-      isImage: true,
     },
     {
       title: "SugarCane Trial",
       location: "Madha, Maharashtra...",
       percentage: 35,
       description: "Seed Yield Increase",
-      image: "",
-      isImage: false,
-    },
-    {
-      title: "",
-      location: "",
-      percentage: "",
-      description: "",
-      image: bananaImg,
-      isImage: true,
+      image: sugarcane,
     },
     {
       title: "Cauliflower Trails ",
       location: "Nevare, Malshiras",
       percentage: 39,
       description: "Yield Increase",
-      image: "",
-      isImage: false,
-    },
-    {
-      title: "",
-      location: "",
-      percentage: "",
-      description: "",
-      image: sugarcane,
-      isImage: true,
+      image: cauliflowerImg,
     },
   ];
 
@@ -63,7 +36,20 @@ const TestGrid = () => {
       </h2>
       <div className="grid grid-cols-1 gap-2 sm:grid-cols-3 lg:grid-cols-3 gap-6 w-full max-w-6xl animate-fade-in-right">
         {trials.map((trial, index) => (
-          <TestCard key={index} {...trial} />
+          index === 1 && window.innerWidth > 750 ? (
+            <div >
+              <TestCard key={index} {...trial} />
+              <TestCard isImage={true} {...trial} />
+            </div>
+
+          ) :
+            (
+              <div >
+                <TestCard isImage={true} {...trial} />
+                <TestCard key={index} {...trial} />
+              </div>
+
+            )
         ))}
       </div>
     </section>

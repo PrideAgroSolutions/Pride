@@ -2,12 +2,12 @@ import React from "react";
 
 const TestCard = ({ title, location, percentage, description, image, isImage }) => {
   return (
-    <div className="w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl mx-auto">
+    <div className="w-full mt-2 max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl mx-auto">
       {isImage ? (
         <img
           src={image}
           alt={title}
-          className="w-full h-full aspect-square object-cover border border-gray-300 "
+          className="w-full h-full aspect-square object-cover border border-gray-300 transition-transform duration-300 hover:scale-95"
         />
       ) : (
         <div className="relative w-full aspect-square flex flex-col items-start justify-center bg-[#d1ad0e] text-left border border-gray-300 transition-transform duration-300 hover:scale-95">
