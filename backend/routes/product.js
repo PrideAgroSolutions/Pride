@@ -72,14 +72,14 @@ router.get('/getProduct/:id', async (req, res) => {
 // Admin End
 // POST route to add a new product
 
+// POST route to add a new product
 router.post('/addProduct', async (req, res) => {
     try {
-        if (!req.files || !req.files.image) {
-            return res.status(400).json({ message: 'Image file is required.' });
+        if (!req.files || !req.files.images) {
+            return res.status(400).json({ message: 'At least one image is required.' });
         }
 
-        // Extract the file and other fields from the request
-        const file = req.files.image; // 'image' matches the key sent in the frontend's FormData
+        const files = req.files.images; // 'images' matches the key sent in the frontend's FormData
         const {
             name,
             composition,
@@ -92,11 +92,15 @@ router.post('/addProduct', async (req, res) => {
 
         // Validate required fields
         if (!name || !composition || !dosage || !packing || !benefits || !target || !price) {
-            return res.status(400).json({ message: 'All fields except image are required.' });
+            return res.status(400).json({ message: 'All fields except images are required.' });
         }
 
-        // Upload the image to Cloudinary
-        const uploadResult = await cloudinary.uploader.upload(file.tempFilePath);
+        // Upload each image to Cloudinary
+        const imageUrls = [];
+        for (const file of files) {
+            const uploadResult = await cloudinary.uploader.upload(file.tempFilePath);
+            imageUrls.push(uploadResult.secure_url); // Store the Cloudinary image URLs
+        }
 
         // Create a new product instance
         const newProduct = new Product({
@@ -104,7 +108,7 @@ router.post('/addProduct', async (req, res) => {
             composition,
             dosage,
             packing,
-            image: uploadResult.url, // Save the Cloudinary image URL
+            image: imageUrls, // Store multiple image URLs in an array
             benefits,
             target,
             price,
@@ -135,21 +139,26 @@ router.put('/updateProduct/:id', async (req, res) => {
             return res.status(404).json({ message: 'Product not found.' });
         }
 
-        // Check if an image is included in the request
-        if (req.files && req.files.image) {
-            const file = req.files.image;
+        // Check if new images are included in the request
+        if (req.files && req.files.images) {
+            const files = req.files.images;
 
-            // Delete existing image from Cloudinary
-            if (existingProduct.image) {
-                const url = new URL(existingProduct.image); // Parse URL
-                const pathname = url.pathname; // Get path from URL
-                const publicId = pathname.substring(pathname.lastIndexOf('/') + 1, pathname.lastIndexOf('.')); // Extract public ID
+            // Delete existing images from Cloudinary
+            for (const oldImage of existingProduct.image) {
+                const url = new URL(oldImage);
+                const pathname = url.pathname;
+                const publicId = pathname.substring(pathname.lastIndexOf('/') + 1, pathname.lastIndexOf('.'));
                 await cloudinary.uploader.destroy(publicId);
             }
 
-            // Upload new image to Cloudinary
-            const uploadResult = await cloudinary.uploader.upload(file.tempFilePath);
-            updates.image = uploadResult.secure_url; // Store new image URL
+            // Upload new images to Cloudinary
+            const imageUrls = [];
+            for (const file of files) {
+                const uploadResult = await cloudinary.uploader.upload(file.tempFilePath);
+                imageUrls.push(uploadResult.secure_url);
+            }
+
+            updates.image = imageUrls; // Store new image URLs
         }
 
         // Update the product in the database
@@ -176,11 +185,11 @@ router.delete('/deleteProduct/:id', async (req, res) => {
             return res.status(404).json({ message: 'Product not found.' });
         }
 
-        // Delete product image from Cloudinary
-        if (product.image) {
-            const url = new URL(product.image); // Parse URL
-            const pathname = url.pathname; // Get path from URL
-            const publicId = pathname.substring(pathname.lastIndexOf('/') + 1, pathname.lastIndexOf('.')); // Extract public ID
+        // Delete product images from Cloudinary
+        for (const oldImage of product.image) {
+            const url = new URL(oldImage);
+            const pathname = url.pathname;
+            const publicId = pathname.substring(pathname.lastIndexOf('/') + 1, pathname.lastIndexOf('.'));
             await cloudinary.uploader.destroy(publicId);
         }
 
@@ -195,7 +204,6 @@ router.delete('/deleteProduct/:id', async (req, res) => {
         res.status(500).json({ message: 'Server error. Please try again later.' });
     }
 });
-
 
 
 module.exports = router;
