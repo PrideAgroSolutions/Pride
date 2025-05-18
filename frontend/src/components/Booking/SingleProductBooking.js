@@ -68,6 +68,80 @@ const SingleProductBooking = () => {
     }
   };
 
+  
+  const handlePayment = async (amount) => {
+    try {
+      const response = await axios.post(`${BACKEND_URL_LINK}/api/v6/createOrder`, {
+        amount: amount / 100, // amount in paise
+        currency: "INR"
+      });
+      const order = response.data.order;
+
+      const key = await axios.get(`${BACKEND_URL_LINK}/api/v6/getKey`);
+      const rozarkey = key.data.key_id;
+
+      return new Promise((resolve, reject) => {
+        const options = {
+          key: rozarkey,
+          amount: amount / 100,
+          currency: 'INR',
+          name: 'Acme Corp',
+          description: 'Test Transaction',
+          order_id: order.id,
+          callback_url: `${BACKEND_URL_LINK}/api/v6/paymentVerification`,
+          prefill: {
+            name: userName,
+            email: 'gaurav.kumar@example.com',
+            contact: '9999999999'
+          },
+          theme: {
+            color: '#F37254'
+          },
+          handler: function (response) {
+            // Payment successful
+            resolve(true);
+          },
+          modal: {
+            ondismiss: function () {
+              // Payment popup closed without completing payment
+              resolve(false);
+            }
+          }
+        };
+
+        // eslint-disable-next-line no-undef
+        if (typeof Razorpay === "undefined") {
+          const script = document.createElement("script");
+          script.src = "https://checkout.razorpay.com/v1/checkout.js";
+          script.async = true;
+          script.onload = () => {
+            // eslint-disable-next-line no-undef
+            const rzp = new Razorpay(options);
+            rzp.open();
+          };
+          document.body.appendChild(script);
+        } else {
+          // eslint-disable-next-line no-undef
+          const rzp = new Razorpay(options);
+          rzp.open();
+        }
+      });
+    } catch (error) {
+      console.error("Error creating order:", error);
+      return false;
+    }
+  };
+
+  const handlingProcess = async () => {
+    const paymentSuccess = await handlePayment(totalPrice);
+    if (paymentSuccess) {
+      toast.success("Payment successful!");
+      handlePlaceOrder();
+    } else {
+      toast.error("Payment failed or cancelled. Please try again.");
+    }
+  }
+
   const handlePlaceOrder = async () => {
     if (!selectedAddress) {
       toast.error("Please select an address before placing the order.");
@@ -182,7 +256,7 @@ const SingleProductBooking = () => {
             </button>
             <button
               className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
-              onClick={handlePlaceOrder}
+              onClick={handlingProcess}
             >
               Place Order
             </button>
