@@ -72,7 +72,7 @@ const SingleProductBooking = () => {
   const handlePayment = async (amount) => {
     try {
       const response = await axios.post(`${BACKEND_URL_LINK}/api/v6/createOrder`, {
-        amount: amount / 100, // amount in paise
+        amount: amount, // amount in paise
         currency: "INR"
       });
       const order = response.data.order;

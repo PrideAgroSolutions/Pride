@@ -94,7 +94,7 @@ const Booking = () => {
       return new Promise((resolve, reject) => {
         const options = {
           key: rozarkey,
-          amount: amount / 100,
+          amount: amount,
           currency: 'INR',
           name: 'Acme Corp',
           description: 'Test Transaction',
